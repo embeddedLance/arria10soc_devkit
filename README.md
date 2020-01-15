@@ -1,0 +1,1 @@
+This repository follows the documentation given by Rocket boards to compile and run linux and userspace application on A10 GSRD v17.1. This [link](https://rocketboards.org/foswiki/Documentation/A10GSRDV171UserManual) has been followed.
