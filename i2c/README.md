@@ -29,8 +29,14 @@ i2cdump -y 0 0x70
 
 ## Testing i2c with apps:
 ```sh
+# setup build environment using Quartus EDS
 ~/intelFPGA_pro/17.1/embedded/embedded_command_shell.sh 
+
+# To build the default EEPROG from codesink use the following
+# command
 arm-linux-gnueabihf-gcc -o eeprog eeprog.c 24cXX.c
+
+# To build a simple test that writes one byte to the EEPROM
 arm-linux-gnueabihf-gcc -o eeprom_test eeprom_test.c 24cXX.c
 ```
 
