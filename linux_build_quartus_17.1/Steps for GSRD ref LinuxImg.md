@@ -1,8 +1,61 @@
+## Setting up build softwares
+Install Quartus Pro 17.1 using:
+```sh
+./QuartusProSetup-17.1.0.240-linux.run
+```
+Install SoC Embedded Design Suite:
+```sh
+./SoCEDSProSetup-17.1.0.240-linux.run
+```
+Test DS-5 installation:
+```sh
+~/intelFPGA_pro/17.1/embedded/embedded_command_shell.sh
+```
+if you get DS-5 path not found error edit ```~/intelFPGA_pro/17.1/embedded/env.sh``` and set the path of 
+DS-5 manually to your installation directory which was this ```_DS5_ROOT="/usr/local/DS-5_v5.27.1/"``` 
+in my case.
 
+## Compiling Hardware Design, Uboot, Linux Device Tree and Linux
+1. Hardware Design Compilation [this](https://rocketboards.org/foswiki/Documentation/A10GSRDCompilingHardwareDesign171)
+   If you get errors while compiling for time_limited IPs. Remove them from the project
+2. [Uboot Compilation](https://rocketboards.org/foswiki/Documentation/A10GSRDGeneratingUBootAndUBootDeviceTree)
+3. [Linux Device Tree](https://rocketboards.org/foswiki/Documentation/A10GSRDGeneratingTheLinuxDeviceTreeLTS)
+   To enable spidev add the following in ```ghrd_10as066n2.dts``` and then compile the dtb file
 
+```
+      spi0: spidev@0 {
+        compatible = "spidev";
+        reg = <0x0>;
+        spi-max-frequency = <1000000>;
+        enable-dma = <0x1>;
+      };
+```
+to make it similar to this
+```
+.....
+    a10_hps_i_spis_0_spis: spi@0xffda2000 {
+      compatible = "snps,dw-spi-mmio-17.1", "snps,dw-spi-mmio", "snps,dw-apb-ssi";
+      reg = <0xffda2000 0x00000100>;
+      interrupt-parent = <&a10_hps_arm_gic_0>;
+      interrupts = <0 101 4>;
+      clocks = <&l4_mp_clk>;
+      #address-cells = <1>; /* embeddedsw.dts.params.#address-cells type NUMBER */
+      #size-cells = <0>;  /* embeddedsw.dts.params.#size-cells type NUMBER */
+      bus-num = <0>;  /* embeddedsw.dts.params.bus-num type NUMBER */
+      num-chipselect = <4>; /* embeddedsw.dts.params.num-chipselect type NUMBER */
+      status = "okay";  /* embeddedsw.dts.params.status type STRING */
 
+      spi0: spidev@0 {
+        compatible = "spidev";
+        reg = <0x0>;
+        spi-max-frequency = <1000000>;
+        enable-dma = <0x1>;
+      };
+    }; //end spi@0xffda2000 (a10_hps_i_spis_0_spis) 
+....
 
-
+```
+4. [Build Linux](https://rocketboards.org/foswiki/Documentation/GSRDCompilingLinux)
 
 ## Setting up environment in CentOS:
 Setting up ethernet:
@@ -63,4 +116,13 @@ sudo make_sdimage.py  \
   -P zImage,ghrd_10as066n2.core.rbf,ghrd_10as066n2.periph.rbf,socfpga_arria10_socdk_sdmmc.dtb,num=1,format=vfat,size=500M  \
   -s 2G  \
   -n sdimage.img
+```
+
+## Burn Image on SD Card:
+Use balena etcher to burn the sdimage.img to the SD card
+
+## Building applications for SoC:
+```sh
+~/intelFPGA_pro/17.1/embedded/embedded_command_shell.sh
+arm-linux-gnueabihf-gcc -o hello hello.c
 ```
