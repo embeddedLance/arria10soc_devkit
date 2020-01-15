@@ -21,7 +21,11 @@ i2cdetect -y -r 0
 60: -- -- -- -- -- -- -- -- UU -- -- -- -- -- -- -- 
 70: 70 71 -- -- -- -- -- --   
 ```
-So our device is 70. We can read data from the device using:
+So our device is 70. We can write data to the EEPROM using
+```sh
+i2cset -y 0 0x70 0x04 0x69
+```
+We can read data from the device using:
 ```sh
 i2cdump -y 0 0x70
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
@@ -44,23 +48,32 @@ f0: 40 65 00 f0 XX 00 00 1d 00 a8 00 80 00 00 00 00    @e.?X..?.?.?....
 ```
 
 ## Testing i2c with apps:
-CodeSink provides a very good application for testing i2c EEPROMs [EEPROG source code](www.codesink.org/download/eeprog-0.7.6.tar.gz).
 
-This source code has been modified into the test application in the folder eeprom_test.
-To build the test program use the following commands:
+### Setting Up environment for compiling:
 ```sh
 # setup build environment using Quartus EDS
 ~/intelFPGA_pro/17.1/embedded/embedded_command_shell.sh 
 
+```
+### EEPROG:
+CodeSink provides a very good application for testing i2c EEPROMs [EEPROG source code](www.codesink.org/download/eeprog-0.7.6.tar.gz).
+
+Detailed guide on using [EEPROG on a pi](https://www.richud.com/wiki/Rasberry_Pi_I2C_EEPROM_Program). 
+
+```sh
 # To build the default EEPROG from codesink use the following
 # command
 arm-linux-gnueabihf-gcc -o eeprog eeprog.c 24cXX.c
+```
 
+This source code has been modified into the test application in the folder eeprom_test.
+To build the test program use the following commands:
+```sh
 # To build a simple test that writes one byte to the EEPROM
 arm-linux-gnueabihf-gcc -o eeprom_test eeprom_test.c 24cXX.c
 ```
 
-Copy the program to your board using scp or manually copying it into the SD card.
+Copy the program to your board using scp or manually into the SD card.
 And run it as follows:
 
 ```sh
