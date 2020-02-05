@@ -33,25 +33,37 @@ in my case.
 to make it similar to this
 ```
 .....
-    a10_hps_i_spis_0_spis: spi@0xffda2000 {
-      compatible = "snps,dw-spi-mmio-17.1", "snps,dw-spi-mmio", "snps,dw-apb-ssi";
-      reg = <0xffda2000 0x00000100>;
-      interrupt-parent = <&a10_hps_arm_gic_0>;
-      interrupts = <0 101 4>;
-      clocks = <&l4_mp_clk>;
-      #address-cells = <1>; /* embeddedsw.dts.params.#address-cells type NUMBER */
-      #size-cells = <0>;  /* embeddedsw.dts.params.#size-cells type NUMBER */
-      bus-num = <0>;  /* embeddedsw.dts.params.bus-num type NUMBER */
-      num-chipselect = <4>; /* embeddedsw.dts.params.num-chipselect type NUMBER */
-      status = "okay";  /* embeddedsw.dts.params.status type STRING */
+		a10_hps_i_spim_1_spim: spi@0xffda5000 {
+			compatible = "snps,dw-spi-mmio-17.1", "snps,dw-spi-mmio", "snps,dw-apb-ssi";
+			reg = <0xffda5000 0x00000100>;
+			interrupt-parent = <&a10_hps_arm_gic_0>;
+			interrupts = <0x00000000 0x00000066 0x00000004>;	/* appended from boardinfo */
+			clocks = <&spi_m_clk>;
+			#address-cells = <1>;	/* embeddedsw.dts.params.#address-cells type NUMBER */
+			#size-cells = <0>;	/* embeddedsw.dts.params.#size-cells type NUMBER */
+			bus-num = <0>;	/* embeddedsw.dts.params.bus-num type NUMBER */
+			num-chipselect = <4>;	/* embeddedsw.dts.params.num-chipselect type NUMBER */
+			status = "okay";	/* embeddedsw.dts.params.status type STRING */
+			tx-dma-channel = <&a10_hps_i_dma_DMASECURE 0x00000010>;	/* appended from boardinfo */
+			rx-dma-channel = <&a10_hps_i_dma_DMASECURE 0x00000011>;	/* appended from boardinfo */
+			32bit_access;	/* appended from boardinfo */
 
-      spi0: spidev@0 {
-        compatible = "spidev";
-        reg = <0x0>;
-        spi-max-frequency = <1000000>;
-        enable-dma = <0x1>;
-      };
-    }; //end spi@0xffda2000 (a10_hps_i_spis_0_spis) 
+			spi0: spidev@0 {
+        		compatible = "spidev";
+        		reg = <0x0>;
+        		spi-max-frequency = <20000000>;
+        		enable-dma = <0x1>;
+
+
+				gpio4: gpio-controller {
+					compatible = "altr,a10sycon-gpio";	/* appended from boardinfo */
+					gpio-controller;	/* appended from boardinfo */
+					#gpio-cells = <2>;	/* appended from boardinfo */
+					ngpios = <16>;	/* appended from boardinfo */
+				}; //end gpio-controller (gpio4)
+      		};
+		}; //end spi@0xffda5000 (a10_hps_i_spim_1_spim)
+
 ....
 
 ```
