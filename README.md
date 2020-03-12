@@ -1,6 +1,12 @@
 This repository follows the documentation given by Rocket boards to compile and run linux and userspace application on A10 GSRD v17.1. This [link](https://rocketboards.org/foswiki/Documentation/A10GSRDV171UserManual) has been followed.
 
-
+Installing USB-Blaster II in Ubuntu/Linux:
+Use the procedure on pg10 for Intel FPGA Download Cable II:
+https://www.intel.com/content/dam/www/programmable/us/en/pdfs/literature/ug/ug_usb_blstr.pdf
+```
+BUS=="usb", SYSFS{idVendor}=="09fb", SYSFS{idProduct}=="6010", MODE="0666"
+BUS=="usb", SYSFS{idVendor}=="09fb", SYSFS{idProduct}=="6810", MODE="0666"
+```
 Setting up ethernet in Uboot:
 ```
 U-Boot> setenv ipaddr 192.168.1.126
