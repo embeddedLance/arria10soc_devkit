@@ -9,7 +9,7 @@ The result will contain these: ```0xffc02900, 0xffc02a00 and 0xffc02b00```.
 From the **GPIO Address Map** in a10_5v4.pdf(pg 4296):
 
 | Module Instance | Base Address | 
-| =============== | ============ |
+| --------------- | ------------ |
 | i_gpio_0_gpio   | 0xFFC02900   | 
 | i_gpio_1_gpio   | 0xFFC02A00   | 
 | i_gpio_2_gpio   | 0xFFC02B00   |
